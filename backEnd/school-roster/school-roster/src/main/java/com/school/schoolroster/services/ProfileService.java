@@ -96,18 +96,9 @@ public class ProfileService {
 			}
 		}
 	
-	public Profile deleteAddress(Profile profile, List<Address> address) {
+	public void deleteAddress(Address address) {
 		
-		int size = profile.getAddress().size();
-		
-		if(size > 1) {
-			if(size != address.size()) {
-				for(int i = 0; i < address.size(); i++) {
-					profileRepository.deleteAddress(address.get(i).getId());
-				}
-			}
-		}
-		return profile;
+		profileRepository.deleteAddress(address.getId());
 	}
 	
 	public Profile deleteAddressAll(Profile profile, List<Address> address) {
@@ -119,18 +110,9 @@ public class ProfileService {
 		return profile;
 	}
 	
-	public Profile deletePhoneNumber(Profile profile, List<PhoneNumber> phoneNumbers) {
+	public void deletePhoneNumber(PhoneNumber phoneNumbers) {
+		profileRepository.deletePhoneNumber(phoneNumbers.getId());
 			
-			int size = profile.getAddress().size();
-			
-			if(size > 1) {
-				if(size != phoneNumbers.size()) {
-					for(int i = 0; i < phoneNumbers.size(); i++) {
-						profileRepository.deleteAddress(phoneNumbers.get(i).getId());
-					}
-				}
-			}
-			return profile;
 	}
 	
 	public Profile deletePhoneNumberAll(Profile profile, List<PhoneNumber> phoneNumbers) {

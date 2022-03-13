@@ -1,4 +1,4 @@
-import {GET_ERRORS, RESET_ERRORS} from './ActionTypes';
+import {GET_ERRORS, RESET_ERRORS} from '../ActionTypes';
 
 export const error = (state = {}, action) => {
     switch (action.type) {

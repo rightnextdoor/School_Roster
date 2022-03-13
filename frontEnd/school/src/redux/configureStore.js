@@ -1,8 +1,8 @@
 import {createStore, combineReducers,applyMiddleware, compose} from 'redux';
 import {createForms} from 'react-redux-form';
-import { User } from './user';
-import { Profile } from './profile';
-import { error } from './errors';
+import { User } from './UserCreators/user';
+import { Profile } from './ProfileCreators/profile';
+import { error } from './Errors/errors';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 

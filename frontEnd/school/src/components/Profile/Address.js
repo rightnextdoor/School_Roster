@@ -24,14 +24,27 @@ export class Address extends Component {
     
     sendList = () => {
         const {id, streetAddress, city, state, zipCode} = this.state;
-        const list = [{
+        const list = {
             id: id,
             streetAddress: streetAddress,
             city: city,
             state: state,
             zipCode: zipCode
-        }];
+        };
         this.props.getAddress(list);
+        this.toggleDisabled();
+    }
+
+    deleteAddress = () => {
+        const {id, streetAddress, city, state, zipCode} = this.state;
+        const list = {
+            id: id,
+            streetAddress: streetAddress,
+            city: city,
+            state: state,
+            zipCode: zipCode
+        };
+        this.props.delete(list);
         this.toggleDisabled();
     }
 
@@ -46,7 +59,7 @@ export class Address extends Component {
       render() {
 
         const address = this.props.address;
-        
+        const size = this.props.size;
         return(
             <div>
                 <Form.Group as={Col} controlId="streetAddress">
@@ -107,7 +120,15 @@ export class Address extends Component {
                 >
                 {this.state.toggleDisable ? "Edit Address Information" : "Cancel"}
                 </Button>
-                <Button onClick={this.sendList} disabled={this.state.toggleDisable} type="submit" >update</Button>
+                {
+                   !this.state.toggleDisable &&
+                   <Button onClick={this.sendList} disabled={this.state.toggleDisable} type="submit" >update</Button>
+                }
+                {
+              (size > 1 && !this.state.toggleDisable) &&
+              <Button onClick={this.deleteAddress} >Delete</Button>
+            }
+                
             </div>
         );
       }

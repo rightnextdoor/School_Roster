@@ -1,8 +1,10 @@
 import axios from 'axios';
-import * as ActionTypes from './ActionTypes';
-import {baseUrl} from './baseUrl';
-import { history } from '../components/MainComponent';
-import {post, get} from './api';
+import * as ActionTypes from '../ActionTypes';
+import {baseUrl} from '../baseUrl';
+import { history } from '../../components/MainComponent'; 
+import {post, get} from '../api';
+import { fetchProfile } from '../ProfileCreators/ActionCreators';
+import { getErrors } from '../Errors/ActionCreators';
 
 export const initiateLogin = (username, password) =>
     {return async (dispatch) => {
@@ -108,90 +110,3 @@ export const addUser = (user) => ({
 export const signOut = () => ({
     type: ActionTypes.SIGN_OUT
 });
- 
-export const initiateProfile = (profile) => {
-    return async (dispatch) => {
-       
-        try{
-            const token = localStorage.getItem('user_token');
-            if(token){
-            await post(`${baseUrl}/profile`, profile);
-           
-            history.push('/home');
-            }
-        } catch (error){
-            error.response && dispatch(profileFailed(error.response.data));
-        }
-    };
-}
-
-export const fetchProfile = () => {
-    return async (dispatch) => {
-        dispatch(profileLoading());
-        try{
-            const token = localStorage.getItem('user_token');
-            if(token){
-                const profile = await get(`${baseUrl}/profile`, true, true);
-            dispatch(addProfile(profile.data));
-            }
-        }catch (error){
-            error.response && dispatch(profileFailed(error.response.data));
-        }
-    } 
-}
-
-export const postProfile = (profile) => {
-    return async (dispatch) => {
-        
-        try{
-            const token = localStorage.getItem('user_token');
-            if(token){
-                await post(`${baseUrl}/profile/update`, profile, true, true);
-            dispatch(fetchProfile());
-            }
-        }catch (error){
-            error.response && dispatch(profileFailed(error.response.data));
-        }
-    }
-}
-
-export const profileUpdate = (profile) => {
-    return async (dispatch) => {
-        
-        try{
-            const token = localStorage.getItem('user_token');
-            if(token){
-                
-                await post(`${baseUrl}/profile/update`, profile, true, true);
-            dispatch(fetchProfile());
-            }
-        }catch (error){
-            error.response && dispatch(profileFailed(error.response.data));
-        }
-    }
-}
-
-
-export const profileLoading = () => ({
-    type: ActionTypes.PROFILE_LOADING
-});
- 
-export const profileFailed = (errmess) => ({
-    type: ActionTypes.PROFILE_FAILED,
-    payload: errmess
-});
-
-export const addProfile = (profile) => ({
-    type: ActionTypes.ADD_PROFILE,
-    payload: profile
-})
-
-export const getErrors = (errors) => ({
-    type: ActionTypes.GET_ERRORS,
-    errors
-  });
-  
-export const resetErrors = () => ({
-    type: ActionTypes.RESET_ERRORS
-});
-

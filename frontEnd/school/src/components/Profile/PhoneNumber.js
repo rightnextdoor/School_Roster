@@ -22,14 +22,25 @@ export class PhoneNumber extends Component {
     
     sendList = () => {
         const {phoneType, phoneNumber, id} = this.state;
-        const list = [{
+        const list = {
             id: id,
             phoneType: phoneType,
             phoneNumber: phoneNumber
-        }];
+        };
         this.props.getNumber(list);
         this.toggleDisabled();
     }
+
+    deleteNumber = () => {
+      const {phoneType, phoneNumber, id} = this.state;
+      const list = {
+          id: id,
+          phoneType: phoneType,
+          phoneNumber: phoneNumber
+      };
+      this.props.delete(list);
+      this.toggleDisabled();
+  }
 
     handleInputChange = (event) => {
         const { name, value } = event.target;
@@ -38,10 +49,11 @@ export class PhoneNumber extends Component {
         });
       };
       
-      render() {
+  render() {
 
-        const phoneNumbers = this.props.phoneNumber;
-       
+  const phoneNumbers = this.props.phoneNumber;
+  const size = this.props.size;
+     
      return (
         <div>
             <Row>
@@ -74,7 +86,15 @@ export class PhoneNumber extends Component {
                 >
                 {this.state.toggleDisable ? "Edit Phone Number Information" : "Cancel"}
             </Button>
-            <Button onClick={this.sendList} disabled={this.state.toggleDisable} type="submit" >update</Button>
+            {
+              !this.state.toggleDisable &&
+              <Button onClick={this.sendList}  type="submit" >update</Button>
+            }
+            {
+              size > 1 && !this.state.toggleDisable &&
+              <Button onClick={this.deleteNumber} >Delete</Button>
+            }
+            
         </div>
     )
   }

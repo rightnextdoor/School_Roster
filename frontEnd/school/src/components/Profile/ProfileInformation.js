@@ -96,7 +96,11 @@ export class ProfileInformation extends Component {
             >
                 {this.state.toggleDisable ? "Edit Profile Information" : "Cancel"}
             </Button>
-            <Button onClick={this.sendProfile} disabled={this.state.toggleDisable} type="submit" >update</Button>
+            {
+              !this.state.toggleDisable &&
+              <Button onClick={this.sendProfile} disabled={this.state.toggleDisable} type="submit" >update</Button>
+            }
+            
       </div>
     )
   }

@@ -87,23 +87,25 @@ public class ProfileController {
 	@PostMapping("/profile/delete/address")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Profile deleteAddress(@CurrentUser MyUserDetails myUserDetails,
-			@Valid @RequestBody List<Address> address )throws NoSuchResourceFoundException {
+			@Valid @RequestBody Address address )throws NoSuchResourceFoundException {
 		
 		User user = myUserDetailsService.getUser(myUserDetails.getUsername());
-		Profile profile = profileService.getProfile(user);
-		return profileService.deleteAddress(profile, address);
 		
+		 profileService.deleteAddress(address);
+		Profile profile = profileService.getProfile(user);
+		return profile;
 		
 	}
 	
 	@PostMapping("/profile/delete/phoneNumber")
 	@ResponseStatus(HttpStatus.CREATED)
 	public Profile deletePhoneNumber(@CurrentUser MyUserDetails myUserDetails,
-			@Valid @RequestBody List<PhoneNumber> phoneNumbers )throws NoSuchResourceFoundException {
+			@Valid @RequestBody PhoneNumber phoneNumbers )throws NoSuchResourceFoundException {
 		
 		User user = myUserDetailsService.getUser(myUserDetails.getUsername());
+		profileService.deletePhoneNumber(phoneNumbers);
 		Profile profile = profileService.getProfile(user);
-		return profileService.deletePhoneNumber(profile, phoneNumbers);
+		 return profile;
 		
 		
 	}
