@@ -70,7 +70,7 @@ export const registerNewUser = (data) => {
  
 export const login = (username, password) =>
     {return async (dispatch) => {
-        dispatch(userLoading());
+        dispatch(userLoading(true));
  
         try{
             const result = await axios.post(`${baseUrl}/login`,{
@@ -87,6 +87,57 @@ export const login = (username, password) =>
         }
     };
  };
+
+ export const fetchAllStudents = () => {
+    return async (dispatch) => {
+        dispatch(studentUserLoading(true));
+        try{
+            const token = localStorage.getItem('user_token');
+            if(token){
+                const role = 'STUDENT'
+                const allStudents = await post(`${baseUrl}/profile/roles?role=${role}`, true, true);
+                
+                dispatch(addStudentUser(allStudents.data));
+            }
+        } catch (error){
+            error.response && dispatch(studentUserFailed(error.response.data));
+        }
+    };
+}
+
+export const fetchAllTeachers = () => {
+    return async (dispatch) => {
+        dispatch(teacherUserLoading(true));
+        try{
+            const token = localStorage.getItem('user_token');
+            if(token){
+                const role = 'TEACHER'
+                const allTeachers = await post(`${baseUrl}/profile/roles?role=${role}`, true, true);
+                
+                dispatch(addTeacherUser(allTeachers.data));
+            }
+        } catch (error){
+            error.response && dispatch(teacherUserFailed(error.response.data));
+        }
+    };
+}
+
+export const fetchAllLeaders = () => {
+    return async (dispatch) => {
+        dispatch(leaderUserLoading());
+        try{
+            const token = localStorage.getItem('user_token');
+            if(token){
+                const role = 'TEACHER_LEADER'
+                const allLeaders = await post(`${baseUrl}/profile/roles?role=${role}`, true, true);
+                
+                dispatch(addLeaderUser(allLeaders.data));
+            }
+        } catch (error){
+            error.response && dispatch(leaderUserFailed(error.response.data));
+        }
+    };
+}
  
 export const signIn = (user) => ({
     type: ActionTypes.SIGN_IN,
@@ -109,4 +160,46 @@ export const addUser = (user) => ({
 
 export const signOut = () => ({
     type: ActionTypes.SIGN_OUT
+});
+
+export const studentUserLoading = () => ({
+    type: ActionTypes.STUDENT_USER_LOADING
+});
+ 
+export const studentUserFailed = (errmess) => ({
+    type: ActionTypes.STUDENT_USER_FAILED,
+    payload: errmess
+});
+ 
+export const addStudentUser = (user) => ({
+    type: ActionTypes.ADD_STUDENT_USER,
+    payload: user
+});
+
+export const teacherUserLoading = () => ({
+    type: ActionTypes.TEACHER_USER_LOADING
+});
+ 
+export const teacherUserFailed = (errmess) => ({
+    type: ActionTypes.TEACHER_USER_FAILED,
+    payload: errmess
+});
+ 
+export const addTeacherUser = (user) => ({
+    type: ActionTypes.ADD_TEACHER_USER,
+    payload: user
+});
+
+export const leaderUserLoading = () => ({
+    type: ActionTypes.LEADER_USER_LOADING
+});
+ 
+export const leaderUserFailed = (errmess) => ({
+    type: ActionTypes.LEADER_USER_FAILED,
+    payload: errmess
+});
+ 
+export const addLeaderUser = (user) => ({
+    type: ActionTypes.ADD_LEADER_USER,
+    payload: user
 });

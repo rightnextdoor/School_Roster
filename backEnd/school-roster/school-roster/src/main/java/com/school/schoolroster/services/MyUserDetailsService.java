@@ -1,5 +1,7 @@
 package com.school.schoolroster.services;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,13 @@ public class MyUserDetailsService implements UserDetailsService {
 	
 	public User getUser(String username) {
 		Optional<User> user = userRepository.findByUsername(username);
-		
 		return user.get();
+	}
+	
+	public List<User> getAllUserByRole(String role) {
+		List<User> user = new ArrayList<>();
+		userRepository.findAllByRole(role)
+		.forEach(user::add);
+		return user;
 	}
 }

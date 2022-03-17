@@ -1,5 +1,6 @@
 package com.school.schoolroster.models;
 
+import javax.management.loading.PrivateClassLoader;
 import javax.persistence.*;
 
 import java.util.ArrayList;
@@ -24,11 +25,10 @@ public class Profile {
 	private String firstName;
 	private String lastName;
 	private String ssn;
-	private String photo;
+
 	private String username;
 	private String email;
 	private String role;
-	
 	
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "user_id", nullable = false)
@@ -49,14 +49,13 @@ public class Profile {
 		this.user = user;
 	}
 	
-	public Profile(long id, String firstName, String lastName, String ssn, String photo,
+	public Profile(long id, String firstName, String lastName, String ssn,
 			User user, List<Address> address, List<PhoneNumber>phoneNumber ) {
 		super();
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.ssn = ssn;
-		this.photo = photo;
 		this.username = user.getUsername();
 		this.email = user.getEmail();
 		this.role = user.getRole();
@@ -66,13 +65,12 @@ public class Profile {
 		
 	}
 
-	public Profile(String firstName, String lastName, String ssn, String photo,
+	public Profile(String firstName, String lastName, String ssn,
 			User user, List<Address> address, List<PhoneNumber> phoneNumber ) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.ssn = ssn;
-		this.photo = photo;
 		this.username = user.getUsername();
 		this.email = user.getEmail();
 		this.role = user.getRole();
@@ -83,13 +81,12 @@ public class Profile {
 	}
 	
 	
-	  public Profile(String firstName, String lastName, String ssn, String photo,
+	  public Profile(String firstName, String lastName, String ssn,
 			  User user, Address address, PhoneNumber phoneNumber ) { 
 		  super();
 		  this.firstName = firstName; 
 		  this.lastName = lastName; 
 		  this.ssn = ssn;
-		  this.photo = photo; 
 		  this.username = user.getUsername(); 
 		  this.email = user.getEmail(); 
 		  this.role = user.getRole();
@@ -98,14 +95,11 @@ public class Profile {
 		  this.phoneNumber.add(phoneNumber);
 	  
 	  }
-	
-	  public Profile(String firstName, String lastName, String ssn, String photo,
-			User user) {
+	public Profile(String firstName, String lastName, String ssn, User user) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.ssn = ssn;
-		this.photo = photo;
 		this.username = user.getUsername(); 
 		this.email = user.getEmail(); 
 		this.role = user.getRole();
@@ -150,14 +144,6 @@ public class Profile {
 
 	public void setSsn(String ssn) {
 		this.ssn = ssn;
-	}
-
-	public String getPhoto() {
-		return photo;
-	}
-
-	public void setPhoto(String photo) {
-		this.photo = photo;
 	}
 
 	public String getUsername() {
@@ -223,5 +209,5 @@ public class Profile {
 		getPhoneNumber.setProfile(this);
 		phoneNumber.add(getPhoneNumber);
 	}
-	
+
 }

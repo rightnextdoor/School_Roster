@@ -9,9 +9,9 @@ export const initiateProfile = (profile) => {
         try{
             const token = localStorage.getItem('user_token');
             if(token){
-            await post(`${baseUrl}/profile`, profile);
-           
-            history.push('/home');
+            await post(`${baseUrl}/profile`, profile, true, true);
+            dispatch(fetchProfile());
+            history.push('/profile');
             }
         } catch (error){
             error.response && dispatch(profileFailed(error.response.data));
@@ -26,14 +26,20 @@ export const fetchProfile = () => {
             const token = localStorage.getItem('user_token');
             if(token){
                 const profile = await get(`${baseUrl}/profile`, true, true);
+                
             dispatch(addProfile(profile.data));
             }
         }catch (error){
-            error.response && dispatch(profileFailed(error.response.data));
+            
+            if(error.response.data.message === "No value present"){
+                history.push('/createProfile');
+            } else {
+                error.response && dispatch(profileFailed(error.response.data));
+            }
+            
         }
     } 
 }
-
 export const profileUpdate = (profile) => {
     return async (dispatch) => {
         

@@ -52,12 +52,11 @@ class Profile extends Component {
     }
   
   callbackPhoneList = (list) => {
-    const updateList = list[0];
     this.setState(prevState => ({
       phoneNumber: prevState.phoneNumber.map(eachItem =>
-      eachItem.id === updateList.id ? {...eachItem, 
-        phoneType: updateList.phoneType,
-        phoneNumber: updateList.phoneNumber } 
+      eachItem.id === list.id ? {...eachItem, 
+        phoneType: list.phoneType,
+        phoneNumber: list.phoneNumber } 
         : eachItem
       )
     }));
@@ -65,14 +64,13 @@ class Profile extends Component {
   }
   
   callbackAddressList = (list) => {
-    const updateList = list[0];
     this.setState(prevState => ({
       address: prevState.address.map(eachItem =>
-        eachItem.id === updateList.id ? {...eachItem, 
-          streetAddress: updateList.streetAddress,
-          city: updateList.city,
-          state: updateList.state,
-          zipCode: updateList.zipCode } 
+        eachItem.id === list.id ? {...eachItem, 
+          streetAddress: list.streetAddress,
+          city: list.city,
+          state: list.state,
+          zipCode: list.zipCode } 
           : eachItem
       )
     }));
@@ -82,9 +80,9 @@ class Profile extends Component {
   updateProfile(event){
     event.preventDefault();
     if(this.state.isSubmit){
-      const user = this.props.user;
-      const { id, firstName, lastName, ssn, photo, address, phoneNumber} = this.state;
-  
+      const user = this.props.profile.user;
+      const { id, firstName, lastName, ssn, address, phoneNumber} = this.state;
+      
       //const fd = new FormData();
       //console.log('photo ', photo)
       //fd.append('image', photo)
@@ -105,19 +103,39 @@ class Profile extends Component {
   }
 
   addAddress = (address) => {
-    this.props.addAddress(address)
+    const user = this.props.profile.user;
+    const send = {
+      user: user,
+      address: address
+    }
+    this.props.addAddress(send)
   }
 
   addPhoneNumber = (phone) => {
-    this.props.addPhoneNumber(phone)
+    const user = this.props.profile.user;
+    const send = {
+      user: user,
+      phoneNumber: phone
+    }
+    this.props.addPhoneNumber(send)
   }
 
   deleteAddress = (address) => {
-    this.props.deleteAddress(address)
+    const user = this.props.profile.user;
+    const send = {
+      user: user,
+      address: address
+    }
+    this.props.deleteAddress(send)
   }
   
   deletePhoneNumber = (phone) => {
-    this.props.deletePhoneNumber(phone)
+    const user = this.props.profile.user;
+    const send = {
+      user: user,
+      phoneNumber: phone
+    }
+    this.props.deletePhoneNumber(send)
   }
   
   handleInputChange = (event) => {
@@ -129,6 +147,9 @@ class Profile extends Component {
   
   render() {
     const profile = this.props.profile;
+    const photo = this.props.photo;
+    //console.log('photo ', photo[0].url);
+    
     var addressList = [];
     var phoneNumberList = [];
       
@@ -138,7 +159,7 @@ class Profile extends Component {
     if(profile.phoneNumber){
         phoneNumberList = profile.phoneNumber;
     }
-  
+
     return (
       <div>
         <Form onSubmit={this.updateProfile}>
@@ -146,6 +167,7 @@ class Profile extends Component {
           {/* <Row>
             <Photo profile={profile} />
           </Row> */}
+          
           <ProfileInformation 
             key={profile.id}
             profile={profile}

@@ -1,5 +1,6 @@
 package com.school.schoolroster.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.school.schoolroster.models.Profile;
 import com.school.schoolroster.models.User;
 
-import antlr.collections.List;
 
 @Repository
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
@@ -52,4 +52,7 @@ public interface ProfileRepository extends JpaRepository<Profile, Long> {
 	@Transactional
 	@Query("delete from phone_number u where u.id = :id")
 	void deletePhoneNumber(@Param(value = "id") long id);
+	
+	@Query("select u from Profile u where u.role like %:role%")
+	List<Profile> findAllByRole(@Param("role") String role);
 }

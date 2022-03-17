@@ -21,13 +21,21 @@ public class ProfileService {
 	@Autowired
 	ProfileRepository profileRepository;
 	
-	public Profile initialProfile(Profile profile, User user) {
+	public Profile initialProfile(Profile profile) {
+		
 		Profile newProfile = new Profile(profile.getFirstName(), profile.getLastName(),
-				profile.getSsn(), profile.getPhoto(), user);
+				profile.getSsn(), profile.getUser());
 		newProfile.addAddress(profile.getAddress(), newProfile);
 		newProfile.addPhoneNumber(profile.getPhoneNumber(), newProfile);
 		saveProfile(newProfile);
 		return newProfile;
+	}
+	
+	public List<Profile> getAllProfileByRole(String role) {
+		List<Profile> profile = new ArrayList<>();
+		profileRepository.findAllByRole(role)
+		.forEach(profile::add);
+		return profile;
 	}
 	
 	public Profile saveProfile(Profile profile) {
@@ -63,7 +71,6 @@ public class ProfileService {
 		profile.setFirstName(updateProfile.getFirstName());
 		profile.setLastName(updateProfile.getLastName());
 		profile.setSsn(updateProfile.getSsn());
-		profile.setPhoto(updateProfile.getPhoto());
 		updateAddress(updateProfile);
 		updatePhoneNumber(updateProfile);
 		

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,6 +23,7 @@ import com.school.schoolroster.models.PhoneNumber;
 import com.school.schoolroster.models.Profile;
 import com.school.schoolroster.models.User;
 import com.school.schoolroster.payload.CurrentUser;
+import com.school.schoolroster.payload.RequestChangeProfile;
 import com.school.schoolroster.services.MyUserDetailsService;
 import com.school.schoolroster.services.ProfileService;
 
@@ -37,14 +39,22 @@ public class ProfileController {
 	
 	@PostMapping("/profile")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Profile createProfile(@CurrentUser MyUserDetails myUserDetails,
-			@Valid @RequestBody Profile profile ) {
+	public Profile createProfile(@Valid @RequestBody Profile profile ) {
 		
-		User user = myUserDetailsService.getUser(myUserDetails.getUsername());
-		profile.setUser(user);
+		return profileService.initialProfile(profile);
 		
-		return profileService.initialProfile(profile, user);
-		
+	}
+	
+	@PostMapping("/profile/users")
+	@ResponseStatus(HttpStatus.CREATED)
+	public Profile getProfile(@Valid @RequestBody User user) {
+		return profileService.getProfile(user);
+	}
+	
+	@PostMapping("/profile/roles")
+	@ResponseStatus(HttpStatus.CREATED)
+	public List<Profile> getProfileByRole(@RequestParam("role") String role){
+		return profileService.getAllProfileByRole(role);
 	}
 	
 	@GetMapping("/profile")
@@ -56,55 +66,39 @@ public class ProfileController {
 	
 	@PostMapping("/profile/address")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Profile addAddress(@CurrentUser MyUserDetails myUserDetails,
-			@Valid @RequestBody Address address )throws NoSuchResourceFoundException {
-		
-		User user = myUserDetailsService.getUser(myUserDetails.getUsername());
-		return profileService.addAddress(address, user);
+	public Profile addAddress(@Valid @RequestBody RequestChangeProfile change)throws NoSuchResourceFoundException {
+		return profileService.addAddress(change.getAddress(), change.getUser());
 	}
 	
 	@PostMapping("/profile/phoneNumber")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Profile addAddress(@CurrentUser MyUserDetails myUserDetails,
-			@Valid @RequestBody PhoneNumber phoneNumber )throws NoSuchResourceFoundException {
-		
-		User user = myUserDetailsService.getUser(myUserDetails.getUsername());
-		return profileService.addPhoneNumber(phoneNumber, user);
+	public Profile addPhoneNumber(@Valid @RequestBody RequestChangeProfile change )throws NoSuchResourceFoundException {
+		return profileService.addPhoneNumber(change.getPhoneNumber(), change.getUser());
 	}
 	
 	@PostMapping("/profile/update")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Profile updateProfile(@CurrentUser MyUserDetails myUserDetails,
-			@Valid @RequestBody Profile updateProfile )throws NoSuchResourceFoundException {
-		
-		User user = myUserDetailsService.getUser(myUserDetails.getUsername());
-		updateProfile.setUser(user);
-		
-		return profileService.updateProfile(updateProfile, user);
+	public Profile updateProfile(@Valid @RequestBody Profile updateProfile )throws NoSuchResourceFoundException {
+		return profileService.updateProfile(updateProfile, updateProfile.getUser());
 		
 	}
 	
 	@PostMapping("/profile/delete/address")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Profile deleteAddress(@CurrentUser MyUserDetails myUserDetails,
-			@Valid @RequestBody Address address )throws NoSuchResourceFoundException {
+	public Profile deleteAddress(@Valid @RequestBody RequestChangeProfile change)throws NoSuchResourceFoundException {
 		
-		User user = myUserDetailsService.getUser(myUserDetails.getUsername());
-		
-		 profileService.deleteAddress(address);
-		Profile profile = profileService.getProfile(user);
+		profileService.deleteAddress(change.getAddress());
+		Profile profile = profileService.getProfile(change.getUser());
 		return profile;
 		
 	}
 	
 	@PostMapping("/profile/delete/phoneNumber")
 	@ResponseStatus(HttpStatus.CREATED)
-	public Profile deletePhoneNumber(@CurrentUser MyUserDetails myUserDetails,
-			@Valid @RequestBody PhoneNumber phoneNumbers )throws NoSuchResourceFoundException {
+	public Profile deletePhoneNumber(@Valid @RequestBody RequestChangeProfile change)throws NoSuchResourceFoundException {
 		
-		User user = myUserDetailsService.getUser(myUserDetails.getUsername());
-		profileService.deletePhoneNumber(phoneNumbers);
-		Profile profile = profileService.getProfile(user);
+		profileService.deletePhoneNumber(change.getPhoneNumber());
+		Profile profile = profileService.getProfile(change.getUser());
 		 return profile;
 		
 		
