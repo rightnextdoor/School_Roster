@@ -58,8 +58,8 @@ export const registerNewUser = (data) => {
     return async (dispatch) => {
         try {
             await axios.post(`${baseUrl}/createUser`, data);
-            dispatch(login(data.username, data.password));
-            history.push('/profile');
+            localStorage.setItem('user', JSON.stringify(data));
+            history.push('/createProfile');
             return {success: true};
         } catch (error) {
             error.response && dispatch(userFailed(error.response.data));

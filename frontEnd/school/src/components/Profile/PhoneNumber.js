@@ -15,7 +15,7 @@ export class PhoneNumber extends Component {
     }
 
     toggleDisabled(){
-      this.setState({toggleDisable: !this.toggleDisabled})
+      this.setState({toggleDisable: !this.state.toggleDisable})
       this.props.toggleSubmit();
        
    }

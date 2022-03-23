@@ -20,11 +20,13 @@ public class ProfileService {
 	
 	@Autowired
 	ProfileRepository profileRepository;
+	@Autowired
+	MyUserDetailsService myUserDetailsService;
 	
 	public Profile initialProfile(Profile profile) {
-		
+		User user = myUserDetailsService.getUser(profile.getUser().getUsername());
 		Profile newProfile = new Profile(profile.getFirstName(), profile.getLastName(),
-				profile.getSsn(), profile.getUser());
+				profile.getSsn(), user);
 		newProfile.addAddress(profile.getAddress(), newProfile);
 		newProfile.addPhoneNumber(profile.getPhoneNumber(), newProfile);
 		saveProfile(newProfile);

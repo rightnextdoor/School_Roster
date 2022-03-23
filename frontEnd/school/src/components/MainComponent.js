@@ -8,10 +8,13 @@ import CreateProfile from "./Profile/CreateProfile";
 import StudentComponent from "./Student/StudentComponent";
 import TeacherComponent from "./Teacher/TeacherComponent";
 import LeaderComponent from "./Leader/LeaderComponent";
+import ShowUserProfile from "./Profile/ShowUserProfile";
+import CreateStudents from "./CreateUsers/CreateStudents";
+import CreateTeacher from "./CreateUsers/CreateTeacher";
 import _ from 'lodash';
 import {Switch, Route, Redirect, Router, withRouter} from 'react-router-dom';
 import { fetchProfile, profileUpdate, addAddress, addPhoneNumber, deleteAddress, deletePhoneNumber, initiateProfile } from "../redux/ProfileCreators/ActionCreators";
-import { fetchUser, initiateLogin, login, fetchAllStudents, fetchAllTeachers, fetchAllLeaders } from "../redux/UserCreators/ActionCreators";
+import { fetchUser, initiateLogin, login, fetchAllStudents, fetchAllTeachers, fetchAllLeaders, registerNewUser } from "../redux/UserCreators/ActionCreators";
 import { fetchPhoto, initiatePhoto, photoUpdate } from "../redux/PhotoCreators/ActionCreators";
 import {createBrowserHistory} from 'history';
 import {connect} from 'react-redux';
@@ -33,6 +36,7 @@ const mapDispatchToProps = (dispatch) => ({
     initiateLogin: (username, password) => dispatch(initiateLogin(username, password)),
     fetchUser: () => {dispatch(fetchUser())},
     login: (username, password) => dispatch(login(username,password)),
+    registerNewUser: (data) => dispatch(registerNewUser(data)),
     fetchProfile: () => {dispatch(fetchProfile())},
     profileUpdate: (profile) => dispatch(profileUpdate(profile)),
     initiateProfile: (profile) => dispatch(initiateProfile(profile)),
@@ -71,8 +75,9 @@ class Main extends Component{
                             <Route path="/" component={() => <Welcome postUser={this.props.initiateLogin} />} exact={true} />
                             <Route path="/home" component={() => <Home user={this.props.user.user}
                                 profile={this.props.profile.profile}/>} /> 
+                            <Route path="/profile/user" component={ShowUserProfile} />    
                             <Route path="/profile" component={() => <Profile profile={this.props.profile.profile}
-                                user={this.props.user.user} postProfile={this.props.profileUpdate}
+                                postProfile={this.props.profileUpdate}
                                 addAddress={this.props.addAddress} addPhoneNumber={this.props.addPhoneNumber}
                                 deleteAddress={this.props.deleteAddress} deletePhoneNumber={this.props.deletePhoneNumber}
                                 photo={this.props.photo.photo} postPhoto={this.props.initiatePhoto} photoUpdate={this.props.photoUpdate}/>}
@@ -82,6 +87,8 @@ class Main extends Component{
                             <Route path="/student" component={() => <StudentComponent studentList={this.props.studentUsers.studentUsers}/>} />
                             <Route path="/teacher" component={() => <TeacherComponent teacherList={this.props.teacherUsers.teacherUsers}/>} />
                             <Route path="/leader" component={() => <LeaderComponent leaderList={this.props.leaderUsers.leaderUsers}/>} />
+                            <Route path="/createStudents" component={() => <CreateStudents createUser={this.props.registerNewUser} />} />
+                            <Route path="/createTeachers" component={() => <CreateTeacher createUser={this.props.registerNewUser}/>} />
                             <Route path="/logout" component={Logout} />
                             <Redirect to="/home" />
                         </Switch>

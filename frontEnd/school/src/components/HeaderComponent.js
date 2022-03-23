@@ -19,6 +19,10 @@ class Header extends Component{
                 <Nav.Link href="/leader">Leaders</Nav.Link>
               </Nav>
             }
+            <Nav className="me-auto">
+              <Nav.Link href="/createStudents">Create Student</Nav.Link>
+              <Nav.Link href="/createTeachers">Create Teacher</Nav.Link>
+            </Nav>
           <Nav>
             <Navbar.Text>
               Signed in as: <a >{profile.firstName}</a>

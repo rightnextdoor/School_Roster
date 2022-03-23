@@ -32,14 +32,15 @@ export class CreateProfile extends Component {
             phoneType: phoneType,
             phoneNumber: phoneNumber
         }]
-        const user = this.props.user;
+        const user = JSON.parse(localStorage.getItem('user'));
+        console.log('user', user);
        const profile = {
            firstName: firstName,
            lastName: lastName,
            ssn: ssn,
            address: address,
            phoneNumber: phoneNumbers,
-           user: user
+           user
        };
        console.log('send profile ', profile);
        this.props.postProfile(profile);

@@ -11,7 +11,8 @@ export const initiateProfile = (profile) => {
             if(token){
             await post(`${baseUrl}/profile`, profile, true, true);
             dispatch(fetchProfile());
-            history.push('/profile');
+            localStorage.removeItem('user');
+            history.push('/home');
             }
         } catch (error){
             error.response && dispatch(profileFailed(error.response.data));

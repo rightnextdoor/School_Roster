@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button} from 'react-bootstrap';
 import PhoneNumber from './PhoneNumber';
 import Address from './Address';
-import Photo from './Photo/Photo';
 import ProfileInformation from './ProfileInformation';
 import AddAddress from './AddAddress';
 import AddPhoneNumber from './AddPhoneNumber';
@@ -83,10 +82,6 @@ class Profile extends Component {
       const user = this.props.profile.user;
       const { id, firstName, lastName, ssn, address, phoneNumber} = this.state;
       
-      //const fd = new FormData();
-      //console.log('photo ', photo)
-      //fd.append('image', photo)
-          
       const profile = {
         id: id,
         firstName: firstName,
@@ -147,9 +142,6 @@ class Profile extends Component {
   
   render() {
     const profile = this.props.profile;
-    const photo = this.props.photo;
-    //console.log('photo ', photo[0].url);
-    
     var addressList = [];
     var phoneNumberList = [];
       
@@ -164,9 +156,6 @@ class Profile extends Component {
       <div>
         <Form onSubmit={this.updateProfile}>
           <h4>Profile</h4>
-          {/* <Row>
-            <Photo profile={profile} />
-          </Row> */}
           
           <ProfileInformation 
             key={profile.id}
