@@ -4,7 +4,7 @@ import java.util.*;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetails;
+
 import org.springframework.stereotype.Service;
 
 import com.school.schoolroster.models.Address;
@@ -13,8 +13,6 @@ import com.school.schoolroster.models.Profile;
 import com.school.schoolroster.models.User;
 import com.school.schoolroster.repository.ProfileRepository;
 
-
-
 @Service
 public class ProfileService {
 	
@@ -22,6 +20,12 @@ public class ProfileService {
 	ProfileRepository profileRepository;
 	@Autowired
 	MyUserDetailsService myUserDetailsService;
+	@Autowired
+	StudentService studentService;
+	@Autowired
+	TeacherService teacherService;
+	@Autowired
+	TeacherLeadService teacherLeadService;
 	
 	public Profile initialProfile(Profile profile) {
 		User user = myUserDetailsService.getUser(profile.getUser().getUsername());
@@ -30,6 +34,14 @@ public class ProfileService {
 		newProfile.addAddress(profile.getAddress(), newProfile);
 		newProfile.addPhoneNumber(profile.getPhoneNumber(), newProfile);
 		saveProfile(newProfile);
+		
+		if(newProfile.getRole().equals("STUDENT")) {
+			studentService.initialStudent(newProfile);
+		} else {
+			teacherService.initialTeacher(newProfile);
+			
+		}
+		
 		return newProfile;
 	}
 	

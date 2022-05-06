@@ -24,12 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.school.schoolroster.exception.BadRequestException;
 import com.school.schoolroster.models.MyUserDetails;
+import com.school.schoolroster.models.Profile;
 import com.school.schoolroster.models.User;
 import com.school.schoolroster.payload.CurrentUser;
 import com.school.schoolroster.payload.SignUpRequest;
+import com.school.schoolroster.roster.Roster;
+import com.school.schoolroster.roster.Student;
+import com.school.schoolroster.roster.Teacher;
+import com.school.schoolroster.roster.TeacherLeader;
 import com.school.schoolroster.security.AuthenticationRequest;
 import com.school.schoolroster.security.AuthenticationResponse;
 import com.school.schoolroster.services.MyUserDetailsService;
+import com.school.schoolroster.services.ProfileService;
+import com.school.schoolroster.services.StudentService;
+import com.school.schoolroster.services.TeacherLeadService;
+import com.school.schoolroster.services.TeacherService;
 import com.school.schoolroster.util.JwtUtil;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -41,6 +50,15 @@ public class UserController {
 	
 	@Autowired
 	private MyUserDetailsService userDetailsService;
+	
+	@Autowired
+	private StudentService studentService;
+	@Autowired
+	private TeacherService teacherService;
+	@Autowired
+	private TeacherLeadService teacherLeadService;
+	@Autowired
+	private ProfileService profileService;
 	
 	@Autowired
 	private JwtUtil jwtTokenUtil;
@@ -90,4 +108,57 @@ public class UserController {
 		return userDetailsService.getAllUserByRole(role);
 	}
 	
+	@PostMapping("/student")
+	@ResponseStatus(HttpStatus.OK)
+	public Student setStudent(@RequestBody User user) {
+		Profile profile = profileService.getProfile(user);
+		return studentService.initialStudent(profile);
+	}
+	
+	@GetMapping("/student/id")
+	@ResponseStatus(HttpStatus.OK)
+	public Student getStudentById(@RequestBody Student student) {
+		return studentService.getStudentById(student.getId());
+	}
+	@GetMapping("/student")
+	@ResponseStatus(HttpStatus.OK)
+	public List<Student> getAllStudent() {
+		return studentService.getAllStudentsInSchool();
+	}
+	
+	@PostMapping("/teacher")
+	@ResponseStatus(HttpStatus.OK)
+	public Teacher setTeacher(@RequestBody User user) {
+		Profile profile = profileService.getProfile(user);
+		return teacherService.initialTeacher(profile);
+	}
+	
+	@GetMapping("/teacher/id")
+	@ResponseStatus(HttpStatus.OK)
+	public Teacher getTeacherById(@RequestBody Teacher teacher) {
+		return teacherService.getTeacherById(teacher.getId());
+	}
+	@GetMapping("/teacher")
+	@ResponseStatus(HttpStatus.OK)
+	public List<Teacher> getAllTeacher() {
+		return teacherService.getAllTeacherInSchool();
+	}
+	
+	@PostMapping("/teacherLeader")
+	@ResponseStatus(HttpStatus.OK)
+	public TeacherLeader setTeacherLeader(@RequestBody User user) {
+		Profile profile = profileService.getProfile(user);
+		return teacherLeadService.initialTeacherLeader(profile);
+	}
+	
+	@GetMapping("/teacherLeader/id")
+	@ResponseStatus(HttpStatus.OK)
+	public TeacherLeader getTeacherLeaderById(@RequestBody TeacherLeader teacher) {
+		return teacherLeadService.getTeacherLeaderById(teacher.getId());
+	}
+	@GetMapping("/teacherLeader")
+	@ResponseStatus(HttpStatus.OK)
+	public List<TeacherLeader> getAllTeacherLeader() {
+		return teacherLeadService.getAllTeacherLeaders();
+	}
 }
