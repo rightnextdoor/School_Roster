@@ -20,9 +20,9 @@ public class TeacherService {
 	
 	public Teacher initialTeacher(Profile profile) {
 		
-		if(!profile.getRole().equals("TEACHER")) {
-			throw new BadRequestException("Not a Teacher");
-		}
+//		if(!profile.getRole().equals("TEACHER")) {
+//			throw new BadRequestException("Not a Teacher");
+//		}
 		/*
 		if(teacherRepository.findById(profile.getUser().getId()) != null) {
 			throw new BadRequestException("Teacher is already set");

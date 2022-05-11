@@ -16,6 +16,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.school.schoolroster.models.Profile;
 
 @Entity
@@ -110,11 +113,10 @@ public class Teacher {
 		this.teacherLeader = teacherLeader;
 	}
 	
-/*
 	public List<Roster> getRosters() {
 		return rosters;
 	}
-*/
+
 	public void setRosters(List<Roster> rosters) {
 		this.rosters = rosters;
 	}

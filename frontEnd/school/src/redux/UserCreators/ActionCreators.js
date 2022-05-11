@@ -94,8 +94,7 @@ export const login = (username, password) =>
         try{
             const token = localStorage.getItem('user_token');
             if(token){
-                const role = 'STUDENT'
-                const allStudents = await post(`${baseUrl}/profile/roles?role=${role}`, true, true);
+                const allStudents = await get(`${baseUrl}/student`, true, true);
                 
                 dispatch(addStudentUser(allStudents.data));
             }
@@ -111,8 +110,7 @@ export const fetchAllTeachers = () => {
         try{
             const token = localStorage.getItem('user_token');
             if(token){
-                const role = 'TEACHER'
-                const allTeachers = await post(`${baseUrl}/profile/roles?role=${role}`, true, true);
+                const allTeachers = await get(`${baseUrl}/teacher`, true, true);
                 
                 dispatch(addTeacherUser(allTeachers.data));
             }
@@ -128,8 +126,7 @@ export const fetchAllLeaders = () => {
         try{
             const token = localStorage.getItem('user_token');
             if(token){
-                const role = 'TEACHER_LEADER'
-                const allLeaders = await post(`${baseUrl}/profile/roles?role=${role}`, true, true);
+                const allLeaders = await get(`${baseUrl}/teacherLeader`, true, true);
                 
                 dispatch(addLeaderUser(allLeaders.data));
             }

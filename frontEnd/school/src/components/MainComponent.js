@@ -5,9 +5,9 @@ import Logout from "./Logout";
 import Header from "./HeaderComponent";
 import Profile from "./Profile/ProfileComponent";
 import CreateProfile from "./Profile/CreateProfile";
-import StudentComponent from "./Student/StudentComponent";
-import TeacherComponent from "./Teacher/TeacherComponent";
-import LeaderComponent from "./Leader/LeaderComponent";
+import StudentComponent from "../components/ListOfUsers/Student/StudentComponent";
+import TeacherComponent from "../components/ListOfUsers/Teacher/TeacherComponent";
+import LeaderComponent from "../components/ListOfUsers/Leader/LeaderComponent";
 import ShowUserProfile from "./Profile/ShowUserProfile";
 import CreateStudents from "./CreateUsers/CreateStudents";
 import CreateTeacher from "./CreateUsers/CreateTeacher";
@@ -64,7 +64,8 @@ class Main extends Component{
       }
     
     render(){
-      
+        console.log("student ",this.props.studentUsers.studentUsers);
+        console.log("teacher ",this.props.teacherUsers.teacherUsers);
         const token = localStorage.getItem('user_token');
         return(
             <Router history={history}>

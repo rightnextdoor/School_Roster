@@ -15,8 +15,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-
-
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.school.schoolroster.models.Profile;
 
 @Entity
@@ -126,14 +127,14 @@ public class Student {
 	
 	public int getGPA() {
 		
-		int total = 0;
-		for(Roster roster: rosters) {
-			total += getClassAverage(roster);
-		}
-		gpa = total / rosters.size();
-		if(rosters.size() == 0 && total == 0) {
-			gpa = 0;
-		}
+//		int total = 0;
+//		for(Roster roster: rosters) {
+//			total += getClassAverage(roster);
+//		}
+//		gpa = total / rosters.size();
+//		if(rosters.size() == 0 && total == 0) {
+//			gpa = 0;
+//		}
 		return gpa;
 	}
 

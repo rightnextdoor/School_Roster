@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import GetUserProfile from '../Profile/GetUserProfile';
+import { UserTable } from '../UserTable/UserTable';
 
 export class LeaderComponent extends Component {
   render() {
       const leaderList = this.props.leaderList;
     return (
       <div>
-          {leaderList.map(user =><GetUserProfile key={user.id} user={user}/>)}
+          <UserTable user={leaderList}/>
       </div>
     )
   }

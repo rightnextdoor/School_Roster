@@ -19,8 +19,17 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity(name = "roster")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Table(name = "roster")
 public class Roster {
 
@@ -33,12 +42,15 @@ public class Roster {
 	private int classAverage = 0;
 	
 	@ManyToMany(mappedBy = "rosters")
+	//@JsonBackReference
 	private List<Teacher> teachers = new ArrayList<>();
 	
 	@ManyToMany(mappedBy = "rosters")
+	//@JsonBackReference
 	private List<Student> students = new ArrayList<>();
 	
 	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	//@JsonManagedReference
 	@JoinTable(
 			name = "grade_roster",
 			joinColumns = @JoinColumn(name = "roster_id"),

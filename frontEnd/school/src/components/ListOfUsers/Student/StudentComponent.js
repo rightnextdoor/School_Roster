@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import GetUserProfile from '../Profile/GetUserProfile';
+import { UserTable } from '../UserTable/UserTable';
 
 export class StudentComponent extends Component {
   render() {
     const studentList = this.props.studentList;
     return (
       <div>
-        {studentList.map(user =><GetUserProfile key={user.id} user={user}/>)}
+        <UserTable user={studentList}/>
       </div>
     )
   }

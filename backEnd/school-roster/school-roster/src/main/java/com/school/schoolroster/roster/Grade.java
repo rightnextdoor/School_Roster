@@ -14,8 +14,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 
 @Entity(name = "grade")
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 @Table(name = "grade")
 public class Grade {
 	
@@ -30,10 +38,12 @@ public class Grade {
 	
 	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "roster_id")
+	//@JsonBackReference
 	private Roster roster;
 	
 	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "student_id")
+	//@JsonBackReference
 	private Student student;
 	
 	public Grade() {
