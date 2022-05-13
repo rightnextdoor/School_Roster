@@ -10,8 +10,19 @@ class Profile extends Component {
 
   constructor(props) {
     super(props)
-    const profile = this.props.profile;
+    var profile = {
+      id: 0,
+      firstName: '',
+      lastName: '',
+      ssn: '',
+      address: '',
+      phoneNumber: '',
+      
+    };
         
+        if(this.props.profile !== undefined){
+          profile = this.props.profile;
+        }
     this.state = {      
       isSubmit: true,
       id: profile.id,
@@ -141,7 +152,18 @@ class Profile extends Component {
   };
   
   render() {
-    const profile = this.props.profile;
+    var profile = {
+      id: 0,
+      firstName: '',
+      lastName: '',
+      ssn: '',
+      address: '',
+      phoneNumber: '',
+      
+    };
+    if(this.props.profile !== undefined){
+      profile = this.props.profile;
+    }
     var addressList = [];
     var phoneNumberList = [];
       

@@ -3,6 +3,7 @@ package com.school.schoolroster.controllers;
 import java.util.Collections;
 import java.util.List;
 
+import javax.management.relation.Role;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,9 @@ import com.school.schoolroster.models.MyUserDetails;
 import com.school.schoolroster.models.Profile;
 import com.school.schoolroster.models.User;
 import com.school.schoolroster.payload.CurrentUser;
+import com.school.schoolroster.payload.GetRole;
 import com.school.schoolroster.payload.SignUpRequest;
+
 import com.school.schoolroster.roster.Roster;
 import com.school.schoolroster.roster.Student;
 import com.school.schoolroster.roster.Teacher;
@@ -100,6 +103,29 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public User getUser(@CurrentUser MyUserDetails myUserDetails) {
 		return userDetailsService.getUser(myUserDetails.getUsername());
+		
+	}
+	
+	@GetMapping("/user/role")
+	@ResponseStatus(HttpStatus.OK)
+	public GetRole getUserRole(@CurrentUser MyUserDetails myUserDetails) {
+		User user = userDetailsService.getUser(myUserDetails.getUsername());
+		GetRole role = new GetRole();
+		if(user.getRole().equals("STUDENT")) {
+			Student student = studentService.getStudentById(user.getId());
+			role.setStudent(student);
+			
+		} else if (user.getRole().equals("TEACHER") || user.getRole().equals("ADMIN")){
+			Teacher teacher = teacherService.getTeacherById(user.getId());
+			
+			role.setTeacher(teacher);
+		}else {
+			TeacherLeader teacherLeader = teacherLeadService.getTeacherLeaderById(user.getId());
+			role.setTeacherLeader(teacherLeader);
+			Teacher teacher = teacherService.getTeacherById(user.getId());
+			role.setTeacher(teacher);
+		}
+		return role;
 	}
 	
 	@PostMapping("/usersRole")

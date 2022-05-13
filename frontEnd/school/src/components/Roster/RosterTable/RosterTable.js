@@ -3,13 +3,13 @@ import { Button } from 'react-bootstrap';
 import { useTable, useSortBy, useGlobalFilter, useRowSelect } from 'react-table';
 import { GlobalFilter } from '../../GlobalFilter';
 import { Checkbox } from '../../Checkbox';
-import { USER_COLUMNS } from './userColumns';
-import './UserTable.css';
+import {ROSTER_COLUMNS} from './RosterColumns'
+import './RosterTable.css';
 
-export const UserTable = ({user}) => {
+export const RosterTable = ({roster}) => {
   
-  const columns = useMemo(() => USER_COLUMNS, [])
-  const data = useMemo(() => user, [])
+  const columns = useMemo(() => ROSTER_COLUMNS, [])
+  const data = useMemo(() => roster, [])
 
   const { 
     getTableProps, 
@@ -104,7 +104,3 @@ export const UserTable = ({user}) => {
     </>
     )
   }
-
-
-
-

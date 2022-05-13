@@ -2,6 +2,7 @@ package com.school.schoolroster.payload;
 
 import java.util.List;
 
+
 import com.school.schoolroster.roster.Grade;
 import com.school.schoolroster.roster.GradeName;
 import com.school.schoolroster.roster.Roster;
@@ -25,6 +26,7 @@ public class RosterRequest {
 	private List<Teacher> teacherList;
 	private List<Student> studentList;
 	private List<Roster> rosterList;
+	
 	
 	public Long getId() {
 		return id;
@@ -116,5 +118,6 @@ public class RosterRequest {
 	public void setIndex(int index) {
 		this.index = index;
 	}
+	
 	
 }

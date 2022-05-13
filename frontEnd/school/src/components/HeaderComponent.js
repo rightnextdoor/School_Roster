@@ -17,6 +17,8 @@ class Header extends Component{
                 <Nav.Link href="/student">Student</Nav.Link>
                 <Nav.Link href="/teacher">Teacher</Nav.Link>
                 <Nav.Link href="/leader">Leaders</Nav.Link>
+                <Nav.Link href="/myRoster">My Roster</Nav.Link>
+                <Nav.Link href="/allRoster">All Roster</Nav.Link>
               </Nav>
             }
             <Nav className="me-auto">

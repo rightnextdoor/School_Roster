@@ -1,12 +1,12 @@
 import React,{Component} from "react";
 
-function Home (props){
-        
+function Home ({user}){
+        console.log('props ',user);
         return(
             <div>
                 <h1>Home</h1>
-                <h4>Welcome {props.profile.firstName} {props.profile.lastName}</h4>
-                <h4>Roles {props.user.role} </h4>
+                <h4>Welcome {user.firstName} {user.lastName}</h4>
+                <h4>Roles {user.roles} </h4>
             </div>
         );
     

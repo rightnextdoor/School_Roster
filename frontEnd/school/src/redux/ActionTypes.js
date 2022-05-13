@@ -1,9 +1,6 @@
 export const ADD_USER = 'ADD_USER';
 export const USER_LOADING = 'USER_LOADING';
 export const USER_FAILED = 'USER_FAILED';
-export const ADD_PROFILE = 'ADD_PROFILE';
-export const PROFILE_LOADING = 'PROFILE_LOADING';
-export const PROFILE_FAILED = 'PROFILE_FAILED';
 export const SIGN_IN = 'SIGN_IN';
 export const SIGN_OUT = 'SIGN_OUT';
 export const GET_ERRORS = 'GET_ERRORS';
@@ -21,3 +18,7 @@ export const TEACHER_USER_FAILED = 'TEACHER_USER_FAILED';
 export const ADD_LEADER_USER = 'ADD_LEADER_USER';
 export const LEADER_USER_LOADING = 'LEADER_USER_LOADING';
 export const LEADER_USER_FAILED = 'LEADER_USER_FAILED';
+export const ADD_ALL_ROSTER = 'ADD_ALL_ROSTER';
+export const ALL_ROSTER_LOADING = 'ALL_ROSTER_LOADING';
+export const ALL_ROSTER_FAILED = 'ALL_ROSTER_FAILED';
+

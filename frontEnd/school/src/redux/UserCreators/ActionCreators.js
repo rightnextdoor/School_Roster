@@ -3,7 +3,6 @@ import * as ActionTypes from '../ActionTypes';
 import {baseUrl} from '../baseUrl';
 import { history } from '../../components/MainComponent'; 
 import {post, get} from '../api';
-import { fetchProfile } from '../ProfileCreators/ActionCreators';
 import { getErrors } from '../Errors/ActionCreators';
 
 export const initiateLogin = (username, password) =>
@@ -17,7 +16,7 @@ export const initiateLogin = (username, password) =>
             const token = result.data;
             localStorage.setItem('user_token', token.jwt);
             dispatch(fetchUser());
-            dispatch(fetchProfile());
+            
                 history.push('/home');
         } catch (error){
             var errorMess = new Error('Error ' + error.response.status + ': username/password is wrong' );
@@ -32,8 +31,16 @@ export const initiateLogin = (username, password) =>
         try{
             const token = localStorage.getItem('user_token');
             if(token){
-                const user = await get(`${baseUrl}/user`, true, true);
-                dispatch(addUser(user.data));
+                const user = await get(`${baseUrl}/user/role`, true, true);
+               
+                if(user.data.student !== null){
+                    dispatch(addUser(user.data.student));
+                } else if(user.data.teacher !== null){
+                    dispatch(addUser(user.data.teacher));
+                } else {
+                    dispatch(addUser(user.data.teacherLeader));
+                }
+               
             }
         } catch (error) {
             error.response && dispatch(userFailed(error.response.data));
