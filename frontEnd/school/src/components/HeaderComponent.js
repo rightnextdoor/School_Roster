@@ -19,11 +19,12 @@ class Header extends Component{
                 <Nav.Link href="/leader">Leaders</Nav.Link>
                 <Nav.Link href="/myRoster">My Roster</Nav.Link>
                 <Nav.Link href="/allRoster">All Roster</Nav.Link>
+                <Nav.Link href="/newProfile">New Profile</Nav.Link>
               </Nav>
             }
             <Nav className="me-auto">
-              <Nav.Link href="/createStudents">Create Student</Nav.Link>
-              <Nav.Link href="/createTeachers">Create Teacher</Nav.Link>
+              <Nav.Link href="/createUser">Create User</Nav.Link>
+              
             </Nav>
           <Nav>
             <Navbar.Text>

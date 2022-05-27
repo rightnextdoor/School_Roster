@@ -6,7 +6,7 @@ import { Checkbox } from '../../Checkbox';
 import {ROSTER_COLUMNS} from './RosterColumns'
 import './RosterTable.css';
 
-export const RosterTable = ({roster}) => {
+export const RosterTable = ({ roster, error}) => {
   
   const columns = useMemo(() => ROSTER_COLUMNS, [])
   const data = useMemo(() => roster, [])
@@ -53,6 +53,8 @@ export const RosterTable = ({roster}) => {
   
   return (
     <>
+      {error &&
+        <div className='error'><p>{error}</p></div>}
     <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <table {...getTableProps()}>
         <thead>

@@ -6,7 +6,7 @@ import { Checkbox } from '../../Checkbox';
 import { USER_COLUMNS } from './userColumns';
 import './UserTable.css';
 
-export const UserTable = ({user}) => {
+export const UserTable = ({user, error}) => {
   
   const columns = useMemo(() => USER_COLUMNS, [])
   const data = useMemo(() => user, [])
@@ -53,6 +53,8 @@ export const UserTable = ({user}) => {
   
   return (
     <>
+      {error &&
+        <div className='error'><p>{error}</p></div>}
     <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <table {...getTableProps()}>
         <thead>

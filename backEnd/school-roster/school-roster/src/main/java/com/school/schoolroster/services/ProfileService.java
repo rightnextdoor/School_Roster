@@ -87,6 +87,15 @@ public class ProfileService {
 		profile.setSsn(updateProfile.getSsn());
 		updateAddress(updateProfile);
 		updatePhoneNumber(updateProfile);
+		  
+		if(user.getRole() == "STUDENT") {
+			studentService.updatedInfo(user, profile);
+		} else {
+			teacherService.updatedInfo(user, profile);
+			if(user.getRole() == "TEACHER,TEACHER_LEADER") {
+				teacherLeadService.updatedInfo(user, profile);
+			}
+		}
 		
 		profileRepository.save(profile);
 		

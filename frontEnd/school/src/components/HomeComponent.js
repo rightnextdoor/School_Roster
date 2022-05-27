@@ -1,7 +1,7 @@
 import React,{Component} from "react";
 
 function Home ({user}){
-        console.log('props ',user);
+        
         return(
             <div>
                 <h1>Home</h1>

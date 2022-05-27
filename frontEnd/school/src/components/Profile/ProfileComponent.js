@@ -1,228 +1,262 @@
-import React, { Component } from 'react';
-import { Form, Button} from 'react-bootstrap';
+import React from 'react'
+import { Formik, Form, FieldArray } from 'formik'
+import * as Yup from 'yup'
+import FormikControl from '../Formik/FormikControl'
+import {
+  profileUpdate, addAddress, addPhoneNumber,
+  deleteAddress, deletePhoneNumber
+} from "../../redux/ProfileCreators/ActionCreators";
+import { connect } from 'react-redux';
+import { Col, Row } from 'react-bootstrap';
+import { useState } from 'react';
 import PhoneNumber from './PhoneNumber';
 import Address from './Address';
-import ProfileInformation from './ProfileInformation';
-import AddAddress from './AddAddress';
-import AddPhoneNumber from './AddPhoneNumber';
 
-class Profile extends Component {
+const mapDispatchToProps = (dispatch) => ({
+  profileUpdate: (profile) => dispatch(profileUpdate(profile)),
+  addAddress: (address) => dispatch(addAddress(address)),
+  addPhoneNumber: (phone) => dispatch(addPhoneNumber(phone)),
+  deleteAddress: (address) => dispatch(deleteAddress(address)),
+  deletePhoneNumber: (phone) => dispatch(deletePhoneNumber(phone)),
+});
 
-  constructor(props) {
-    super(props)
-    var profile = {
-      id: 0,
-      firstName: '',
-      lastName: '',
-      ssn: '',
-      address: '',
-      phoneNumber: '',
-      
-    };
-        
-        if(this.props.profile !== undefined){
-          profile = this.props.profile;
+function Profile(props) {
+  const { profile, error } = props
+  var getProfile = {
+    id: '',
+    firstName: '',
+    lastName: '',
+    ssn: '',
+    address: [{
+      streetAddress: '',
+      city: '',
+      state: '',
+      zipCode: '',
+    }],
+    phoneNumber: [{
+      phoneType: '',
+      phoneNumber: ''
+    }],
+  }
+
+  var phoneCount = 0;
+  var addressCount = 0;
+  var user = null;
+  if (profile !== undefined) {
+    getProfile = profile
+    phoneCount = profile.phoneNumber.length
+    addressCount = profile.address.length
+    user = profile.user;
+  }
+
+  const [toggleUser, setToggleUser] = useState(true)
+  const [toggleReset, setToggleReset] = useState(false)
+
+  const initialValues = {
+    id: getProfile.id || '',
+    firstName: getProfile.firstName || '',
+    lastName: getProfile.lastName || '',
+    ssn: getProfile.ssn || '',
+    address: getProfile.address || [{
+      streetAddress: '',
+      city: '',
+      state: '',
+      zipCode: '',
+    }],
+    phoneNumber: getProfile.phoneNumber || [{
+      phoneType: '',
+      phoneNumber: ''
+    }],
+  }
+
+  const validationSchema = Yup.object({
+    firstName: Yup.string().required('Required'),
+    lastName: Yup.string().required('Required'),
+    ssn: Yup.string().required('Required'),
+    phoneNumber: Yup.array().of(Yup.object().shape({
+      phoneType: Yup.string().required('Required'),
+      phoneNumber: Yup.number().typeError('Must be a number')
+        .integer('No . in the number').required('Required')
+    })),
+    address: Yup.array().of(Yup.object().shape({
+      streetAddress: Yup.string().required('Required'),
+      city: Yup.string().required('Required'),
+      state: Yup.string().required('Required'),
+      zipCode: Yup.number().typeError('Must be a number')
+        .integer('No . in the number').required('Required')
+    })),
+  })
+
+  const onSubmit = (values, { resetForm }) => {
+    if (!toggleReset) {
+      var newAddress = [];
+      values.address.map((address, index) => {
+        if (index < addressCount) {
+          return (
+            newAddress.push(address)
+          )
+        } else {
+          return (
+            newAddress
+          )
         }
-    this.state = {      
-      isSubmit: true,
-      id: profile.id,
-      firstName: profile.firstName, 
-      lastName: profile.lastName,
-      ssn: profile.ssn,
-      address: profile.address,
-      phoneNumber: profile.phoneNumber,
-      photo: '',
-      toggleAddress: false,
-      togglePhone: false
-    }
-    this.updateProfile = this.updateProfile.bind(this);
-    this.handleInputChange = this.handleInputChange.bind(this);
-  }
-
-  toggleAddAddress = () => {
-    this.setState({toggleAddress: !this.state.toggleAddress})
-  }
-
-  toggleAddPhone = () => {
-    this.setState({togglePhone: !this.state.togglePhone})
-  }
-  
-  toggleSubmit = () => {
-    this.setState({ isSubmit: !this.state.isSubmit });
-  }
-  
-  callbackProfile = (profile) => {
-    const updateProfile = profile[0];
-    this.setState({
-      id: updateProfile.id,
-      firstName: updateProfile.firstName, 
-      lastName: updateProfile.lastName,
-      ssn: updateProfile.ssn
       })
-    }
-  
-  callbackPhoneList = (list) => {
-    this.setState(prevState => ({
-      phoneNumber: prevState.phoneNumber.map(eachItem =>
-      eachItem.id === list.id ? {...eachItem, 
-        phoneType: list.phoneType,
-        phoneNumber: list.phoneNumber } 
-        : eachItem
-      )
-    }));
-          
-  }
-  
-  callbackAddressList = (list) => {
-    this.setState(prevState => ({
-      address: prevState.address.map(eachItem =>
-        eachItem.id === list.id ? {...eachItem, 
-          streetAddress: list.streetAddress,
-          city: list.city,
-          state: list.state,
-          zipCode: list.zipCode } 
-          : eachItem
-      )
-    }));
-         
-  }
-      
-  updateProfile(event){
-    event.preventDefault();
-    if(this.state.isSubmit){
-      const user = this.props.profile.user;
-      const { id, firstName, lastName, ssn, address, phoneNumber} = this.state;
-      
+
+      var newPhone = [];
+      values.phoneNumber.map((phone, index) => {
+        if (index < phoneCount) {
+          return (
+            newPhone.push(phone)
+          )
+        } else {
+          return (
+            newPhone
+          )
+        }
+      })
+
       const profile = {
-        id: id,
-        firstName: firstName,
-        lastName: lastName,
-        ssn: ssn,
-        user, 
-        address: address, 
-        phoneNumber
-      };
-          
-      console.log('update', profile);
-      this.props.postProfile(profile);
+        id: values.id,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        ssn: values.ssn,
+        user,
+        address: newAddress,
+        phoneNumber: newPhone
+      }
+      console.log('update', profile)
+      props.profileUpdate(profile)
+    } else {
+      setToggleReset(false);
+      setToggleUser(true);
+      resetForm();
     }
   }
 
-  addAddress = (address) => {
-    const user = this.props.profile.user;
-    const send = {
-      user: user,
-      address: address
-    }
-    this.props.addAddress(send)
-  }
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+      enableReinitialize={true}
+    >
+      {
+        formik => {
+          return <Form>
+            {error &&
+              <div className='error'><p>{error}</p></div>}
+            <Row >
+              <FormikControl
+                control='input'
+                type='text'
+                label='Id'
+                name='id'
+                disabled
+                readOnly
+              />
+              <FormikControl
+                control='input'
+                type='text'
+                label='SSN'
+                name='ssn'
+                disabled={toggleUser}
+              />
+            </Row>
+            <Row>
+              <FormikControl
+                control='input'
+                type='text'
+                label='First Name'
+                name='firstName'
+                disabled={toggleUser}
+              />
+              <FormikControl
+                control='input'
+                type='text'
+                label='Last Name'
+                name='lastName'
+                disabled={toggleUser}
+              />
+            </Row>
+            {toggleUser &&
+              <button type='button' onClick={() => setToggleUser(!toggleUser)}>Edit</button>
+            }
+            {!toggleUser &&
+              <button type='submit'>Update</button>
+            }
+            {!toggleUser &&
+              <button type='rest' onClick={() => { setToggleReset(true); }}>Cancel</button>
+            }
 
-  addPhoneNumber = (phone) => {
-    const user = this.props.profile.user;
-    const send = {
-      user: user,
-      phoneNumber: phone
-    }
-    this.props.addPhoneNumber(send)
-  }
+            <div>
+              <label>Phone Number</label>
+              <FieldArray name='phoneNumber'>
+                {
+                  (fieldArrayProps) => {
+                    const { push, remove, form } = fieldArrayProps
+                    const { values } = form
+                    const { phoneNumber } = values
 
-  deleteAddress = (address) => {
-    const user = this.props.profile.user;
-    const send = {
-      user: user,
-      address: address
-    }
-    this.props.deleteAddress(send)
-  }
-  
-  deletePhoneNumber = (phone) => {
-    const user = this.props.profile.user;
-    const send = {
-      user: user,
-      phoneNumber: phone
-    }
-    this.props.deletePhoneNumber(send)
-  }
-  
-  handleInputChange = (event) => {
-    const { name, value } = event.target;
-    this.setState({
-      [name]: value
-    });
-  };
-  
-  render() {
-    var profile = {
-      id: 0,
-      firstName: '',
-      lastName: '',
-      ssn: '',
-      address: '',
-      phoneNumber: '',
-      
-    };
-    if(this.props.profile !== undefined){
-      profile = this.props.profile;
-    }
-    var addressList = [];
-    var phoneNumberList = [];
-      
-    if(profile.address){
-        addressList = profile.address;
-    }
-    if(profile.phoneNumber){
-        phoneNumberList = profile.phoneNumber;
-    }
+                    return (
+                      <div>
+                        {phoneNumber.map((phNumber, index) => (
+                          <div key={index}>
 
-    return (
-      <div>
-        <Form onSubmit={this.updateProfile}>
-          <h4>Profile</h4>
-          
-          <ProfileInformation 
-            key={profile.id}
-            profile={profile}
-            getProfile={this.callbackProfile}
-            toggleSubmit={this.toggleSubmit}
-          />
-          {addressList.map(address =><Address 
-            key={address.id}
-            address={address}
-            getAddress={this.callbackAddressList}
-            toggleSubmit={this.toggleSubmit}
-            size={addressList.length}
-            delete={this.deleteAddress}
-          />)}
-          {
-            this.state.toggleAddress &&
-            <AddAddress add={this.addAddress} />
-          }
-          {
-            addressList.length < 3 &&
-            <Button onClick={this.toggleAddAddress}>{!this.state.toggleAddress ? "Add Address" : "Cancel"}  </Button>
-          }
-          
-          {phoneNumberList.map(phoneNumber =><PhoneNumber 
-            key={phoneNumber.id}
-            phoneNumber={phoneNumber}
-            getNumber={this.callbackPhoneList}
-            toggleSubmit={this.toggleSubmit}
-            size={phoneNumberList.length}
-            delete={this.deletePhoneNumber}
-          /> )}
-          {
-            this.state.togglePhone &&
-            <AddPhoneNumber add={this.addPhoneNumber} />
-          }
-          {
-            phoneNumberList.length < 3 &&
-            <Button onClick={this.toggleAddPhone}>{!this.state.togglePhone ? "Add Phone Number" : "Cancel"}  </Button>
-          }
-          
-        </Form>
-      </div>
-    )
-  }
+                            <PhoneNumber phNumber={phNumber}
+                              index={index} phoneCount={phoneCount} remove={remove}
+                              user={user} addPhoneNumber={props.addPhoneNumber}
+                              deletePhoneNumber={props.deletePhoneNumber}
+                              form={form}
+                            />
+                          </div>
+                        ))}
+
+                        {
+                          phoneNumber.length < 3 && (
+                            <button type='button' onClick={() => push('')}>Add</button>
+                          )
+                        }
+                      </div>
+                    )
+                  }
+                }
+              </FieldArray>
+            </div>
+            <div>
+              <label>Address</label>
+              <FieldArray name='address'>
+                {
+                  (fieldArrayProps) => {
+                    const { push, remove, form } = fieldArrayProps
+                    const { values } = form
+                    const { address } = values
+
+                    return (
+                      <div>
+                        {address.map((address, index) => (
+                          <div key={index}>
+                            <Address address={address} index={index}
+                              addressCount={addressCount} remove={remove}
+                              user={user} addAddress={props.addAddress}
+                              deleteAddress={props.deleteAddress} form={form} />
+                          </div>
+                        ))}
+                        {
+                          address.length < 3 && (
+                            <button type='button' onClick={() => push('')}>Add</button>
+                          )
+                        }
+                      </div>
+                    )
+                  }
+                }
+              </FieldArray>
+            </div>
+          </Form>
+        }
+      }
+    </Formik>
+  )
 }
 
-export default Profile;
+export default (connect(null, mapDispatchToProps)(Profile));

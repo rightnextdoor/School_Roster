@@ -15,9 +15,10 @@ export class MyRoster extends Component {
   }
   render() {
     const {roster} = this.state;
+    const { error } = this.props
     return (
       <div>
-        <RosterTable roster={roster}/>
+        <RosterTable roster={roster} error={error}/>
       </div>
     )
   }

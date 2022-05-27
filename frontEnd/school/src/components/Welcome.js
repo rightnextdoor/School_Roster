@@ -7,7 +7,7 @@ render(){
         return(
             <>
                 <h1>Welcome</h1>
-                <Login postUser={this.props.postUser}/>
+                <Login postUser={this.props.postUser} error={this.props.error} />
             </>
         );
     }

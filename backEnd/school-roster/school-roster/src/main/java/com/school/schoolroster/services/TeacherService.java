@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.school.schoolroster.exception.BadRequestException;
 import com.school.schoolroster.models.Profile;
+import com.school.schoolroster.models.User;
 import com.school.schoolroster.repository.TeacherRepository;
 import com.school.schoolroster.roster.Roster;
 import com.school.schoolroster.roster.Teacher;
@@ -50,5 +51,12 @@ public class TeacherService {
 	
 	public List<Teacher> getAllTeacherInSchool(){
 		return teacherRepository.findAll();
+	}
+	
+	public void updatedInfo(User user, Profile profile) {
+		Teacher teacher = getTeacherById(user.getId());
+		teacher.setFirstName(profile.getFirstName());
+		teacher.setLastName(profile.getLastName());
+		teacherRepository.save(teacher);
 	}
 }

@@ -3,10 +3,11 @@ import { UserTable } from '../UserTable/UserTable';
 
 export class LeaderComponent extends Component {
   render() {
+    const { error } = this.props;
       const leaderList = this.props.leaderList;
     return (
       <div>
-          <UserTable user={leaderList}/>
+          <UserTable user={leaderList} error={error}/>
       </div>
     )
   }

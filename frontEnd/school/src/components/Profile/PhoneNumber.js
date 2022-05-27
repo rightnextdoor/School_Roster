@@ -1,103 +1,89 @@
-import React, { Component } from 'react'
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import React from 'react'
+import FormikControl from '../Formik/FormikControl'
+import { Row } from 'react-bootstrap'
+import { useState } from 'react'
 
-export class PhoneNumber extends Component {
-    constructor(props) {
-      super(props)
-      const phoneNumbers = this.props.phoneNumber;
-      this.state = {
-         id: phoneNumbers.id,
-         phoneType: phoneNumbers.phoneType,
-         phoneNumber: phoneNumbers.phoneNumber,
-         toggleDisable: true
-      }
-      this.toggleDisabled = this.toggleDisabled.bind(this);
+function PhoneNumber(props) {
+    const { phNumber, index, phoneCount, remove, user, addPhoneNumber, deletePhoneNumber, form } = props
+    const [togglePhone, setTogglePhone] = useState(true)
+
+    const dropdownOptions = [
+        { key: 'Select Phone Type', value: '' },
+        { key: 'Cell', value: 'Cell' },
+        { key: 'Home', value: 'Home' },
+        { key: 'Work', value: 'Work' }
+    ]
+
+    var check = false
+    if (phoneCount < index + 1) {
+        check = true
+
     }
 
-    toggleDisabled(){
-      this.setState({toggleDisable: !this.state.toggleDisable})
-      this.props.toggleSubmit();
-       
-   }
-    
-    sendList = () => {
-        const {phoneType, phoneNumber, id} = this.state;
-        const list = {
-            id: id,
-            phoneType: phoneType,
-            phoneNumber: phoneNumber
-        };
-        this.props.getNumber(list);
-        this.toggleDisabled();
+    const deletePhone = () => {
+        const send = {
+            user: user,
+            phoneNumber: phNumber
+        }
+        deletePhoneNumber(send)
+
     }
 
-    deleteNumber = () => {
-      const {phoneType, phoneNumber, id} = this.state;
-      const list = {
-          id: id,
-          phoneType: phoneType,
-          phoneNumber: phoneNumber
-      };
-      this.props.delete(list);
-      this.toggleDisabled();
-  }
+    const addPhone = () => {
+        const send = {
+            user: user,
+            phoneNumber: phNumber
+        }
+        console.log('add phone number', send)
+        addPhoneNumber(send)
 
-    handleInputChange = (event) => {
-        const { name, value } = event.target;
-        this.setState({
-          [name]: value
-        });
-      };
-      
-  render() {
+    }
 
-  const phoneNumbers = this.props.phoneNumber;
-  const size = this.props.size;
-     
-     return (
+    return (
         <div>
             <Row>
-                <Form.Group as={Col} controlId="phoneType">
-                    <Form.Label>Phone Type</Form.Label>
-                    <Form.Control 
-                    type="text"
-                    name="phoneType"
-                    placeholder="Enter your phone type"
-                    defaultValue={phoneNumbers.phoneType} 
-                    disabled={this.state.toggleDisable} 
-                    onChange={this.handleInputChange}
-                    />
-                </Form.Group>
-
-                <Form.Group as={Col} controlId="phoneNumber">
-                    <Form.Label>Phone Number</Form.Label>
-                    <Form.Control 
-                    type="text"
-                    name="phoneNumber"
-                    placeholder="Enter your phone number"
-                    defaultValue={phoneNumbers.phoneNumber} 
-                    disabled={this.state.toggleDisable} 
-                    onChange={this.handleInputChange}
-                    />
-                </Form.Group>
+                <FormikControl
+                    control='select'
+                    label='Phone Type'
+                    name={`phoneNumber.${index}.phoneType` || ''}
+                    options={dropdownOptions}
+                    disabled={togglePhone && !check}
+                />
+                <FormikControl
+                    control='input'
+                    type='text'
+                    label='Phone Number'
+                    name={`phoneNumber.${index}.phoneNumber` || ''}
+                    disabled={togglePhone && !check}
+                />
             </Row>
-            <Button variant="primary" onClick={this.toggleDisabled} 
-                    type="submit"
-                >
-                {this.state.toggleDisable ? "Edit Phone Number Information" : "Cancel"}
-            </Button>
-            {
-              !this.state.toggleDisable &&
-              <Button onClick={this.sendList}  type="submit" >update</Button>
+            {!check && togglePhone &&
+                <button type='button' onClick={() => setTogglePhone(!togglePhone)}>Edit</button>
             }
             {
-              size > 1 && !this.state.toggleDisable &&
-              <Button onClick={this.deleteNumber} >Delete</Button>
+                !check && !togglePhone &&
+                <button type='submit'>Update</button>
             }
-            
+
+            {
+                !check && phoneCount !== 1 && !togglePhone &&
+                <button type='button' onClick={deletePhone}>Delete</button>
+            }
+            {!check && !togglePhone &&
+                <button type='rest' onClick={() => { form.resetForm(); setTogglePhone(true); }}>Cancel</button>
+            }
+            {
+                check &&
+                <button type='button' onClick={addPhone}>Send</button>
+
+            }
+            {
+                check &&
+                <button type='button' onClick={() => { remove(index); }}>Cancel</button>
+            }
+
         </div>
     )
-  }
 }
 
 export default PhoneNumber

@@ -1,7 +1,7 @@
 import {createStore, combineReducers,applyMiddleware, compose} from 'redux';
 import {createForms} from 'react-redux-form';
 import { User } from './UserCreators/user';
-import { error } from './Errors/errors';
+import { Profile } from './ProfileCreators/profile';
 import { Photo } from './PhotoCreators/photo';
 import { StudentUsers } from './UserCreators/studentUser';
 import { TeacherUsers } from './UserCreators/teacherUser';
@@ -16,7 +16,7 @@ export const ConfigureStore = () => {
     const store = createStore(
         combineReducers({
             user: User,
-            error: error,
+            profile: Profile,
             photo: Photo,
             studentUsers: StudentUsers,
             teacherUsers: TeacherUsers,

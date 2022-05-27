@@ -1,95 +1,55 @@
-import React,{Component} from "react";
-import _ from 'lodash';
-import {Form, Button} from 'react-bootstrap';
-import {validateFields} from '../redux/common';
+import React from 'react'
+import { Formik, Form } from 'formik'
+import * as Yup from 'yup'
+import FormikControl from './Formik/FormikControl'
 
-class Login extends Component{
 
-    constructor(props){
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-            errorMsg: ''
-        };
-       this.handleInputChange.bind(this);
-       this.handleLogin.bind(this);
-    }
-   
-    handleLogin = (event) => {
-     
-        event.preventDefault();
-        const { username, password } = this.state;
-        const fieldsToValidate = [{ username }, { password }];
-       
-        const allFieldsEntered = validateFields(fieldsToValidate);
-        if (!allFieldsEntered){
-            this.setState({
-                errorMsg: {
-                    signin_error: 'Please enter all the fields.'
-                }
-            });
-        } else {
-            this.setState({
-                errorMsg: {
-                    singin_error: ''
-                }
-            });
-            // login successful
-           this.props.postUser(username, password);
-           
-        }
-     };
- 
-    handleInputChange = (event) => {
-        const { name, value } = event.target;
-   
-        this.setState({
-          [name]: value
-        });
-      };
+function Login(props) {
+  const { error } = props
 
-  render(){
-     const { errorMsg } = this.state;
-        return(
-                <div className="login-page">
-            <h1>Login</h1>
-            <div className="login-form">
-              <Form onSubmit={this.handleLogin}>
-                {errorMsg && errorMsg.signin_error && (
-                  <p className="errorMsg centered-message">
-                    {errorMsg.signin_error}
-                  </p>
-                )}
-                <Form.Group controlId="username">
-                  <Form.Label>Username</Form.Label>
-                  <Form.Control
-                    type="text"
-                    name="username"
-                    placeholder="Enter username"
-                    onChange={this.handleInputChange}
-                  />
-                </Form.Group>
-                <Form.Group controlId="password">
-                  <Form.Label>Password</Form.Label>
-                  <Form.Control
-                    type="password"
-                    name="password"
-                    placeholder="Enter password"
-                    onChange={this.handleInputChange}
-                  />
-                </Form.Group>
-                <div className="action-items">
-                  <Button variant="primary" type="submit">
-                    Login
-                  </Button>
-                </div>
-              </Form>
-            </div>
-          </div>
-            );
-    }
+  const initialValues = {
+    username: '',
+    password: '',
+
+  }
+  const validationSchema = Yup.object({
+    username: Yup.string().required('Required'),
+    password: Yup.string().required('Required')
+  })
+  const onSubmit = (values) => {
+    props.postUser(values.username, values.password);
+  }
+  return (
+    <Formik
+      initialValues={initialValues}
+      validationSchema={validationSchema}
+      onSubmit={onSubmit}
+    >
+
+      {
+        formik =>
+          < Form >
+            {error &&
+              <div className='error'><p>{error}</p></div>}
+            {formik.isSubmitting && <div><p>hi</p></div>}
+            <FormikControl
+              control='input'
+              type='text'
+              label='Username'
+              name='username'
+            />
+            <FormikControl
+              control='input'
+              type='password'
+              label='Password'
+              name='password'
+            />
+            <button type='submit' disabled={!formik.isValid}>Submit</button>
+          </Form>
+      }
+    </Formik >
+  )
 }
 
-  
+
 export default Login;
